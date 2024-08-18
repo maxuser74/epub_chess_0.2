@@ -1,0 +1,48 @@
+Orientation_white - False
+
+Move - e4
+Move - c6
+Render
+Text - The opening starts with white e4 and black respond with c6 to prepare the next move d5
+
+Move - d4
+Render
+Text - White replies with d4
+
+Move - d5
+Render
+Text - Black responds with d5 to attack white pawn on e4. White has two options, capture black pawn on d5 or push pawn to e5
+StoreFEN
+
+Move - e5
+Render
+Text - Pushed pawn to e5, this is the advanced variation
+
+Move - c5
+Render
+Text - Levy's suggestion in Karo Cann, put pawn on c5
+
+Move - dxc5
+Render
+Text - White captures on c5
+
+Move - Nc6
+Render
+Text - Black puts knight on c6
+
+RestoreFEN
+Render
+Text - Back to previous position
+
+Move - exd5
+Render
+Text - White captures on d5
+
+Move - cxd5
+Render
+Text - This is called the "Exchange" variation
+
+Move - Bd3
+Move - Nc6
+Render
+Text - After the exchange variation, this is a common position for black and white

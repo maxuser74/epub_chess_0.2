@@ -1,0 +1,21 @@
+Orientation_white - True
+
+Move - e4
+Move - e5
+Render
+Text - The opening starts with white e4 and black respond with e5
+
+Move - Nf3
+Move - Nc6
+Render
+Text - The two Knights are out
+
+Move - Bc4
+Move - Bc5
+Render
+Text - The two Bishops are out
+
+Move - c3
+Move - Nf6
+Render
+Text - White fights for two pawn in the center
