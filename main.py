@@ -126,7 +126,7 @@ for chapter in data_list:
 # Define Table Of Contents
 toc_links = []
 for section_title, chapters in toc_sections.items():
-    toc_links.append(epub.Section(section_title, [epub.Link(chapter[2] + '.xhtml', chapter[1], chapter[2]) for chapter in chapters]))
+    toc_links.append(epub.Section(section_title, [epub.Link(f"{chapter[2]}.xhtml", chapter[1], chapter[2]) for chapter in chapters]))
 
 book.toc = (epub.Link('intro.xhtml', 'Introduction', 'intro'), toc_links)
 
