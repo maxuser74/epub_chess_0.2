@@ -25,7 +25,12 @@ book.add_author("Max Passeri")
 
 # Add default NCX and Nav file
 book.add_item(epub.EpubNcx())
-book.add_item(epub.EpubNav())
+
+print(data_list)
+html_nav = f'<section epub:type="part"><h1>Chess Openings</h1>'
+
+
+book.add_item(epub.EpubNav(html_nav))
 
 with open('style/default.css', 'r') as file:
     css_content = file.read()
@@ -72,10 +77,10 @@ for chapter in data_list:
 
             elif line.startswith("Render"):
                 temp_svg = chess.svg.board(board, size=1500, orientation=board_orientation)
-                jpeg_data = cairosvg.svg2png(bytestring=temp_svg.encode(), output_width=svg_size, output_height=svg_size)
+                png_data = cairosvg.svg2png(bytestring=temp_svg.encode(), output_width=svg_size, output_height=svg_size)
 
-                img_name = f"{file_prefix}_img_{img_count}.jpeg"
-                img_item = epub.EpubItem(uid=img_name, file_name=img_name, media_type='image/jpeg', content=jpeg_data)
+                img_name = f"{file_prefix}_img_{img_count}.png"
+                img_item = epub.EpubItem(uid=img_name, file_name=img_name, media_type='image/png', content=png_data)
                 book.add_item(img_item)
 
                 content += f'<img src="{img_name}">\n'
