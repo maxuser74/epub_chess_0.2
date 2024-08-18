@@ -100,8 +100,7 @@ for chapter in data_list:
                                   lang="en")
     chapter_item.content = content_html
     book.add_item(chapter_item)
-    book_array.append([chapter_item,chapter[4],f"{file_prefix}.xhtml"])
-
+    book_array.append([chapter_item, chapter[4], f"{file_prefix}.xhtml"])
 
 chap_list = [item for item in book.get_items_of_type(ITEM_DOCUMENT)]  # Updated to use ITEM_DOCUMENT
 
@@ -116,23 +115,20 @@ print('Book array')
 print(book_array)
 print('\n')
 
+# Create sections for each unique case found in data_list at position 4
+toc_sections = {}
+for chapter in data_list:
+    section_title = chapter[4]
+    if section_title not in toc_sections:
+        toc_sections[section_title] = []
+    toc_sections[section_title].append(chapter)
 
-# define Table Of Contents
-# book.toc = (chap_list[1:])
+# Define Table Of Contents
+toc_links = []
+for section_title, chapters in toc_sections.items():
+    toc_links.append(epub.Section(section_title, [epub.Link(chapter[2] + '.xhtml', chapter[1], chapter[2]) for chapter in chapters]))
 
-
-
-book.toc = (epub.Link('intro.xhtml', 'Introduction', 'intro'),
-              (
-                epub.Section('White openings'),
-                (chap_list[1:])
-              ),
-               (
-                epub.Section('Black openings'),
-                (chap_list[1:])
-              )
-            )
-
+book.toc = (epub.Link('intro.xhtml', 'Introduction', 'intro'), toc_links)
 
 book.spine = chap_list
 
