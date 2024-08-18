@@ -1,2 +1,4 @@
-1, Italian Game,italian_game,True, White opening
-2, Caro Kann,caro_kann,False, Black opening
+1, Italian Game,italian_game,True,White opening
+2, Caro Kann,caro_kann,False,Black opening
+3, Scandinavian,scandinavian,False,Black opening
+4, Fried liver,fried_liver,True,Tricks

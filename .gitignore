@@ -2,3 +2,4 @@
 .venv
 libcairo*
 *.epub
+.aider*

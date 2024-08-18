@@ -31,6 +31,30 @@ print(html_nav)
 
 book.add_item(epub.EpubNav(html_nav))
 
+def separate_data_by_key(csv_file):
+    data_dict = {}
+
+    with open(csv_file, mode='r') as file:
+        csv_reader = csv.reader(file)
+        
+        for row in csv_reader:
+            key = row[4]  # Use the fifth column as the key
+            value = row[:4]  # Use the first four columns as the value (in a list)
+            
+            # If the key already exists, append the new value list
+            if key in data_dict:
+                data_dict[key].append(value)
+            else:
+                data_dict[key] = [value]  # Start a new list for this key
+    
+    return data_dict
+
+test_dict = separate_data_by_key('chapters/book.csv')
+print('\n')
+print('Separated data by key:')
+print(test_dict)
+print('\n')
+
 
 with open('style/default.css', 'r') as file:
     css_content = file.read()
@@ -90,6 +114,8 @@ for chapter in data_list:
 
     content_html = f"""<html>
       <body>
+        <h1>{chapter[1]}</h>
+        <div style="page-break-before: always" > </div>
         {content}
         </body>
         </html>"""
@@ -100,37 +126,33 @@ for chapter in data_list:
                                   lang="en")
     chapter_item.content = content_html
     book.add_item(chapter_item)
-    book_array.append([chapter_item, chapter[4], f"{file_prefix}.xhtml"])
+    book_array.append([chapter_item,chapter[4],f"{file_prefix}.xhtml"])
+
 
 chap_list = [item for item in book.get_items_of_type(ITEM_DOCUMENT)]  # Updated to use ITEM_DOCUMENT
 
 print(chap_list[1:])
 
-chaps = []
-for item in chap_list[1:]:
-    chaps.append([item.get_name(), item.get_content()])
 
-print('\n')
-print('Book array')
-print(book_array)
-print('\n')
+# define Table Of Contents
+# book.toc = (chap_list[1:])
 
-# Create sections for each unique case found in data_list at position 4
-toc_sections = {}
-for chapter in data_list:
-    section_title = chapter[4]
-    if section_title not in toc_sections:
-        toc_sections[section_title] = []
-    toc_sections[section_title].append(chapter)
 
-# Define Table Of Contents
-toc_links = []
-for section_title, chapters in toc_sections.items():
-    toc_links.append(epub.Section(section_title, [epub.Link(f"{chapter[2]}.xhtml", chapter[1], chapter[2]) for chapter in chapters]))
+book.toc = (epub.Link('intro.xhtml', 'Introduction', 'intro'),
+              (
+                epub.Section('White openings'),
+                (chap_list[1:])
+              ),
+               (
+                epub.Section('Black openings'),
+                (chap_list[1:])
+              )
+            )
 
-book.toc = (epub.Link('intro.xhtml', 'Introduction', 'intro'), toc_links)
 
 book.spine = chap_list
+
+
 
 # Write to the file
 epub.write_epub("test.epub", book, {})

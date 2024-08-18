@@ -9,7 +9,6 @@ import cairosvg
 from ebooklib import ITEM_DOCUMENT  # Added import for ITEM_DOCUMENT
 
 svg_size = 1200
-data_list = []
 
 # Load the chapters list
 with open('chapters/book.csv', 'r') as file:
@@ -23,14 +22,15 @@ book.set_title("Chess Openings")
 book.set_language("en")
 book.add_author("Max Passeri")
 
-# Add default NCX and Nav file
-book.add_item(epub.EpubNcx())
-
 print(data_list)
 html_nav = f'<section epub:type="part"><h1>Chess Openings</h1>'
-
+for item in data_list:
+    html_nav += f'<section epub:type="chapter"><h2>{item[1]}</h2> </section>'
+html_nav += f'</section>'
+print(html_nav)
 
 book.add_item(epub.EpubNav(html_nav))
+
 
 with open('style/default.css', 'r') as file:
     css_content = file.read()
@@ -42,6 +42,7 @@ default_css = epub.EpubItem(uid="style_default",
 book.add_item(default_css)
 
 chapters_html_list = []
+book_array = []
 
 for chapter in data_list:
 
@@ -58,8 +59,6 @@ for chapter in data_list:
 
     # Parse the chapter file
     with open(file_to_parse, 'r') as file:
-        content = f'<h1>{chapter[1]}</h1><div style="break-after:page"></div>\n'
-
         for line in file:
             line = line.strip()
 
@@ -101,12 +100,41 @@ for chapter in data_list:
                                   lang="en")
     chapter_item.content = content_html
     book.add_item(chapter_item)
-
+    book_array.append([chapter_item,chapter[4],f"{file_prefix}.xhtml"])
 
 
 chap_list = [item for item in book.get_items_of_type(ITEM_DOCUMENT)]  # Updated to use ITEM_DOCUMENT
+
+print(chap_list[1:])
+
+chaps = []
+for item in chap_list[1:]:
+    chaps.append([item.get_name(), item.get_content()])
+
+print('\n')
+print('Book array')
+print(book_array)
+print('\n')
+
+
+# define Table Of Contents
+# book.toc = (chap_list[1:])
+
+
+
+book.toc = (epub.Link('intro.xhtml', 'Introduction', 'intro'),
+              (
+                epub.Section('White openings'),
+                (chap_list[1:])
+              ),
+               (
+                epub.Section('Black openings'),
+                (chap_list[1:])
+              )
+            )
+
+
 book.spine = chap_list
-print(chap_list)
 
 # Write to the file
 epub.write_epub("test.epub", book, {})
