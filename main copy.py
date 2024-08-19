@@ -148,7 +148,6 @@ book.toc = (epub.Link('intro.xhtml', 'Introduction', 'intro'),
               )
             )
 
-
 book.spine = chap_list
 
 # Write to the file
