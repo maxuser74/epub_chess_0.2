@@ -137,8 +137,7 @@ for section, chapters in test_dict.items():
     chapter_links = [epub.Link(chapter[2], chapter[1], chapter[2]) for chapter in chapters]
     toc_items.append(epub.Section(section, chapter_links))
 
-#book.toc = toc_items
-book.toc = (epub.Link('intro.xhtml', 'Introduction', 'intro'),toc_items)
+book.toc = toc_items  # Correctly set the TOC
 
 book.spine = chap_list
 
