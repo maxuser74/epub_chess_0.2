@@ -30,30 +30,7 @@ html_nav += f'</section>'
 
 book.add_item(epub.EpubNav(html_nav))
 
-def separate_data_by_key(csv_file):
-    data_dict = {}
-
-    with open(csv_file, mode='r') as file:
-        csv_reader = csv.reader(file)
-        
-        for row in csv_reader:
-            key = row[4]  # Use the fifth column as the key
-            value = row[:4]  # Use the first four columns as the value (in a list)
-            
-            # If the key already exists, append the new value list
-            if key in data_dict:
-                data_dict[key].append(value)
-            else:
-                data_dict[key] = [value]  # Start a new list for this key
-    
-    return data_dict
-
-test_dict = separate_data_by_key('chapters/book.csv')
-print('\n')
-print('Separated data by key:')
-print(test_dict)
-print('\n')
-
+section_dict = {}
 
 with open('style/default.css', 'r') as file:
     css_content = file.read()
@@ -68,7 +45,6 @@ chapters_html_list = []
 book_array = []
 
 for chapter in data_list:
-
     board = chess.Board()
     img_count = 0
     stored_fen = ''
@@ -113,7 +89,7 @@ for chapter in data_list:
 
     content_html = f"""<html>
       <body>
-        <h1>{chapter[1]}</h>
+        <h1>{chapter[1]}</h1>
         <div style="page-break-before: always" > </div>
         {content}
         </body>
@@ -125,30 +101,29 @@ for chapter in data_list:
                                   lang="en")
     chapter_item.content = content_html
     book.add_item(chapter_item)
-    book_array.append([chapter_item,chapter[4],f"{file_prefix}.xhtml"])
+
+    key = chapter[4]  # Use the fifth column as the key
+    value = chapter_item
+    
+    # If the key already exists, append the new value list
+    if key in section_dict:
+        section_dict[key].append(value)
+    else:
+        section_dict[key] = [value]  # Start a new list for this key
+
+    book_array.append([chapter_item, chapter[4], f"{file_prefix}.xhtml"])
 
 
 chap_list = [item for item in book.get_items_of_type(ITEM_DOCUMENT)]  # Updated to use ITEM_DOCUMENT
 
-print(chap_list[1:])
-
-
-# define Table Of Contents
-# book.toc = (chap_list[1:])
-
-
-book.toc = (epub.Link('intro.xhtml', 'Introduction', 'intro'),
-              (
-                epub.Section('White openings'),
-                (chap_list[1:])
-              ),
-               (
-                epub.Section('Black openings'),
-                (chap_list[1:])
-              )
-            )
-
+# Define Table Of Contents using test_dict
+for section, chapters in section_dict.items():
+    print(f'Section: {section}, Chapters: {chapters}')
+    book.toc.append((epub.Section(section), chapters[:]))
+                       
 book.spine = chap_list
+
+print(section_dict)
 
 # Write to the file
 epub.write_epub("test.epub", book, {})

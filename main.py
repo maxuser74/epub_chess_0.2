@@ -44,6 +44,14 @@ book.add_item(default_css)
 chapters_html_list = []
 book_array = []
 
+intro_html = f"""<html>
+    <body>
+    <h1>Welcome!</h1>
+    <p>This is my first ebook on Chess. </p>
+    <p>I hope you enjoy reading such as i enjoyed writing!</p>
+    </body>
+    </html>"""
+
 for chapter in data_list:
     board = chess.Board()
     img_count = 0
@@ -111,19 +119,13 @@ for chapter in data_list:
     else:
         section_dict[key] = [value]  # Start a new list for this key
 
-    book_array.append([chapter_item, chapter[4], f"{file_prefix}.xhtml"])
-
-
 chap_list = [item for item in book.get_items_of_type(ITEM_DOCUMENT)]  # Updated to use ITEM_DOCUMENT
 
 # Define Table Of Contents using test_dict
 for section, chapters in section_dict.items():
-    print(f'Section: {section}, Chapters: {chapters}')
     book.toc.append((epub.Section(section), chapters[:]))
                        
 book.spine = chap_list
-
-print(section_dict)
 
 # Write to the file
 epub.write_epub("test.epub", book, {})
