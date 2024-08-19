@@ -27,7 +27,6 @@ html_nav = f'<section epub:type="part"><h1>Chess Openings</h1>'
 for item in data_list:
     html_nav += f'<section epub:type="chapter"><h2>{item[1]}</h2> </section>'
 html_nav += f'</section>'
-print(html_nav)
 
 book.add_item(epub.EpubNav(html_nav))
 
@@ -151,8 +150,6 @@ book.toc = (epub.Link('intro.xhtml', 'Introduction', 'intro'),
 
 
 book.spine = chap_list
-
-
 
 # Write to the file
 epub.write_epub("test.epub", book, {})

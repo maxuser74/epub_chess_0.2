@@ -27,9 +27,32 @@ html_nav = f'<section epub:type="part"><h1>Chess Openings</h1>'
 for item in data_list:
     html_nav += f'<section epub:type="chapter"><h2>{item[1]}</h2> </section>'
 html_nav += f'</section>'
-print(html_nav)
 
 book.add_item(epub.EpubNav(html_nav))
+
+def separate_data_by_key(csv_file):
+    data_dict = {}
+
+    with open(csv_file, mode='r') as file:
+        csv_reader = csv.reader(file)
+        
+        for row in csv_reader:
+            key = row[4]  # Use the fifth column as the key
+            value = row[:4]  # Use the first four columns as the value (in a list)
+            
+            # If the key already exists, append the new value list
+            if key in data_dict:
+                data_dict[key].append(value)
+            else:
+                data_dict[key] = [value]  # Start a new list for this key
+    
+    return data_dict
+
+test_dict = separate_data_by_key('chapters/book.csv')
+print('\n')
+print('Separated data by key:')
+print(test_dict)
+print('\n')
 
 
 with open('style/default.css', 'r') as file:
@@ -90,6 +113,8 @@ for chapter in data_list:
 
     content_html = f"""<html>
       <body>
+        <h1>{chapter[1]}</h>
+        <div style="page-break-before: always" > </div>
         {content}
         </body>
         </html>"""
@@ -107,19 +132,9 @@ chap_list = [item for item in book.get_items_of_type(ITEM_DOCUMENT)]  # Updated 
 
 print(chap_list[1:])
 
-chaps = []
-for item in chap_list[1:]:
-    chaps.append([item.get_name(), item.get_content()])
-
-print('\n')
-print('Book array')
-print(book_array)
-print('\n')
-
 
 # define Table Of Contents
 # book.toc = (chap_list[1:])
-
 
 
 book.toc = (epub.Link('intro.xhtml', 'Introduction', 'intro'),
