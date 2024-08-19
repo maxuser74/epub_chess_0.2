@@ -113,7 +113,7 @@ for chapter in data_list:
 
     content_html = f"""<html>
       <body>
-        <h1>{chapter[1]}</h>
+        <h1>{chapter[1]}</h1>
         <div style="page-break-before: always" > </div>
         {content}
         </body>
@@ -125,29 +125,19 @@ for chapter in data_list:
                                   lang="en")
     chapter_item.content = content_html
     book.add_item(chapter_item)
-    book_array.append([chapter_item,chapter[4],f"{file_prefix}.xhtml"])
-
+    book_array.append([chapter_item, chapter[4], f"{file_prefix}.xhtml"])
 
 chap_list = [item for item in book.get_items_of_type(ITEM_DOCUMENT)]  # Updated to use ITEM_DOCUMENT
 
 print(chap_list[1:])
 
+# Define Table Of Contents using test_dict
+toc_items = []
+for section, chapters in test_dict.items():
+    chapter_links = [epub.Link(chapter[2], chapter[1], chapter[2]) for chapter in chapters]
+    toc_items.append(epub.Section(section, chapter_links))
 
-# define Table Of Contents
-# book.toc = (chap_list[1:])
-
-
-book.toc = (epub.Link('intro.xhtml', 'Introduction', 'intro'),
-              (
-                epub.Section('White openings'),
-                (chap_list[1:])
-              ),
-               (
-                epub.Section('Black openings'),
-                (chap_list[1:])
-              )
-            )
-
+book.toc = toc_items
 
 book.spine = chap_list
 
