@@ -8,7 +8,7 @@ import os
 import cairosvg
 from ebooklib import ITEM_DOCUMENT  # Added import for ITEM_DOCUMENT
 
-svg_size = 500
+svg_size = 1200
 
 # Load the chapters list
 with open('chapters/book.csv', 'r') as file:
@@ -82,9 +82,12 @@ for chapter in data_list:
                 board.pop()
 
             elif line.startswith("Render"):
-                temp_svg = chess.svg.board(board, size=1500, orientation=board_orientation)
-
-                content += temp_svg
+                temp_svg = chess.svg.board(board, size=1600, orientation=board_orientation)
+                img_name = f"{file_prefix}_img_{img_count}.svg"
+                img_item = epub.EpubItem(uid=img_name, file_name=img_name, media_type='image/svg+xml', content=temp_svg)
+                book.add_item(img_item)
+                
+                content += f'<img src="{img_name}">\n'
                 img_count += 1
 
             elif line.startswith("Text"):

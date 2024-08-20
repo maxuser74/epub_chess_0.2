@@ -11,7 +11,8 @@ Text - White replies with d4
 
 Move - d5
 Render
-Text - Black responds with d5 to attack white pawn on e4. White has two options, capture black pawn on d5 or push pawn to e5
+Text - Black responds with d5 to attack white pawn on e4. 
+Text - White has two options, capture black pawn on d5 or push pawn to e5
 StoreFEN
 
 Move - e5
