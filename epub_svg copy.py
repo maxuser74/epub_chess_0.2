@@ -58,10 +58,10 @@ for chapter in data_list:
     stored_fen = ''
     content = ''
     file_prefix = chapter[2]
-    working_dir = 'chapters/' + file_prefix
+    working_dir = 'chapters/'
 
     board_orientation = chapter[3] == 'True'
-    file_to_parse = os.path.join(working_dir, f"{file_prefix}.txt")
+    file_to_parse = os.path.join(working_dir, f"{file_prefix}.xml")
     print(f'Parsing: {file_to_parse}')
 
     # Parse the chapter file
@@ -69,7 +69,6 @@ for chapter in data_list:
         for line in file:
             line = line.strip()
             print(line)
-
             if line.startswith("Move"):
                 board.push_san(line.split("-", 1)[1].strip())
 
@@ -83,23 +82,19 @@ for chapter in data_list:
                 board.pop()
 
             elif line.startswith("Render"):
-                temp_svg = chess.svg.board(board, size=1500, orientation=board_orientation)
-                png_data = cairosvg.svg2png(bytestring=temp_svg.encode(), output_width=svg_size, output_height=svg_size)
-
-                img_name = f"{file_prefix}_img_{img_count}.png"
-                img_item = epub.EpubItem(uid=img_name, file_name=img_name, media_type='image/png', content=png_data)
+                temp_svg = chess.svg.board(board, size=1600, orientation=board_orientation)
+                img_name = f"{file_prefix}_img_{img_count}.svg"
+                img_item = epub.EpubItem(uid=img_name, file_name=img_name, media_type='image/svg+xml', content=temp_svg)
                 book.add_item(img_item)
-
+                
                 content += f'<img src="{img_name}">\n'
                 img_count += 1
 
-            elif line.startswith("Text"):
-                content += f'<p>{line.split("-", 1)[1].strip()}</p>\n'
+            elif line.startswith("<"):
+                content += line
 
     content_html = f"""<html>
       <body>
-        <h1>{chapter[1]}</h1>
-        <div style="page-break-before: always" > </div>
         {content}
         </body>
         </html>"""

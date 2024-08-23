@@ -1,0 +1,50 @@
+Orientation_white - False
+
+<h3> Caro Kann</h3>
+e4
+c6
+Render
+<p>The opening starts with white e4 and black respond with c6 to prepare the next move d5</p>
+
+d4
+Render
+<p>White replies with d4</p>
+
+d5
+Render
+<p>Black responds with d5 to attack white pawn on e4.</p>
+<p>White has two options, capture black pawn on d5 or push pawn to e5</p>
+StoreFEN
+
+e5
+Render
+<p>Pushed pawn to e5, this is the advanced variation</p>
+
+c5
+Render
+<p>Levy's suggestion in Karo Cann, put pawn on c5</p>
+
+dxc5
+Render
+<p>White captures on c5</p>
+
+Nc6
+Render
+<p>Black puts knight on c6</p>
+
+RestoreFEN
+Render
+<p>Back to previous position</p>
+
+exd5
+Render
+<p>White captures on d5</p>
+
+cxd5
+Render
+<p>This is called the "Exchange" variation</p>
+
+Bd3
+Nc6
+Render
+<p>After the exchange variation, this is a common position for black and white</p>

@@ -8,6 +8,16 @@ import os
 import cairosvg
 from ebooklib import ITEM_DOCUMENT  # Added import for ITEM_DOCUMENT
 
+def is_valid_move(board, san_move):
+    # Try to parse the move in SAN notation
+    try:
+        move = board.parse_san(san_move)  # Parse the move
+        # Check if the move is legal in the current position
+        return board.is_legal(move)
+    except ValueError:
+        # If parsing fails, the move is invalid
+        return False
+
 svg_size = 1200
 
 # Load the chapters list
@@ -58,23 +68,21 @@ for chapter in data_list:
     stored_fen = ''
     content = ''
     file_prefix = chapter[2]
-    working_dir = 'chapters/' + file_prefix
+    working_dir = 'chapters/'
 
     board_orientation = chapter[3] == 'True'
-    file_to_parse = os.path.join(working_dir, f"{file_prefix}.txt")
+    file_to_parse = os.path.join(working_dir, f"{file_prefix}.xml")
     print(f'Parsing: {file_to_parse}')
 
     # Parse the chapter file
     with open(file_to_parse, 'r') as file:
         for line in file:
             line = line.strip()
-
-            if line.startswith("Move"):
-                board.push_san(line.split("-", 1)[1].strip())
-
+            #if line.startswith("Move"):
+            if is_valid_move(board, line):
+                board.push_san(line)            
             elif line.startswith("StoreFEN"):
                 stored_fen = board.fen()
-
             elif line.startswith("RestoreFEN"):
                 board.set_fen(stored_fen)
 
@@ -90,13 +98,11 @@ for chapter in data_list:
                 content += f'<img src="{img_name}">\n'
                 img_count += 1
 
-            elif line.startswith("Text"):
-                content += f'<p>{line.split("-", 1)[1].strip()}</p>\n'
+            elif line.startswith("<"):
+                content += line
 
     content_html = f"""<html>
       <body>
-        <h1>{chapter[1]}</h1>
-        <div style="page-break-before: always" > </div>
         {content}
         </body>
         </html>"""

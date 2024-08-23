@@ -1,5 +1,0 @@
-Orientation_white - True
-
-Move - e4
-Render
-Text - Scandinavian defense

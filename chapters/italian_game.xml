@@ -1,0 +1,22 @@
+Orientation_white - True
+
+<h3>Itaian Game</h3>
+e4
+e5
+Render
+<p>The opening starts with white e4 and black respond with e5</p>
+
+Nf3
+Nc6
+Render
+<p>The two Knights are out</p>
+
+Bc4
+Bc5
+Render
+<p> - The two Bishops are out</p>
+
+c3
+Nf6
+Render
+<p>White fights for two pawn in the center</p>
